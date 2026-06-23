@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>From the Bottom</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <span class="nav-logo">ftb.</span>
+    <div class="nav-links">
+      <a href="index.html" class="active">home</a>
+      <a href="pages/log.html">log</a>
+      <a href="pages/wins.html">wins</a>
+      <a href="pages/hobbies.html">hobbies</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag">day <span id="day-count">1</span> of the rebuild</div>
+    <h1 class="hero-title">from<br/><span class="accent">the bottom.</span></h1>
+    <p class="hero-sub">this is what getting back up looks like. no filter, no highlight reel. just the real thing - day by day.</p>
+
+    <!-- PULSE LINE (signature element) -->
+    <div class="pulse-wrap">
+      <svg class="pulse-svg" viewBox="0 0 800 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path class="pulse-line" id="pulse-path" d="" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="pulse-label">mood over time</div>
+    </div>
+  </section>
+
+  <!-- DAILY QUOTE -->
+  <section class="quote-section">
+    <div class="quote-card" id="quote-card">
+      <div class="quote-mood-tag" id="quote-tag">loading...</div>
+      <p class="quote-text" id="quote-text">-</p>
+      <p class="quote-author" id="quote-author"></p>
+    </div>
+  </section>
+
+  <!-- TODAY'S CHECK-IN -->
+  <section class="checkin-section">
+    <div class="section-label">today's check-in</div>
+    <div class="checkin-card">
+      <div class="mood-row">
+        <span class="mood-question">how are you feeling right now?</span>
+        <span class="mood-score" id="mood-display"></span>
+      </div>
+      <input type="range" min="1" max="10" value="5" class="mood-slider" id="mood-slider" />
+      <div class="mood-labels">
+        <span>rock bottom</span>
+        <span>on top of the world</span>
+      </div>
+      <textarea class="mood-note" id="mood-note" placeholder="what's on your mind today? (optional)"></textarea>
+      <button class="log-btn" id="log-btn">log today </button>
+      <div class="log-confirm" id="log-confirm">logged. </div>
+    </div>
+  </section>
+
+  <!-- RECENT ENTRIES -->
+  <section class="recent-section">
+    <div class="section-label">recent entries</div>
+    <div class="entries-list" id="entries-list">
+      <p class="empty-state">no entries yet - check in above to start your journey.</p>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-section">
+    <div class="section-label">the numbers</div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-num" id="stat-days">0</span>
+        <span class="stat-label">days logged</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num" id="stat-avg">-</span>
+        <span class="stat-label">avg mood</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num" id="stat-best">-</span>
+        <span class="stat-label">best day</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num" id="stat-trend">-</span>
+        <span class="stat-label">trend</span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>from the bottom - <span id="footer-year"></span></span>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

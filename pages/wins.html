@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wins - From the Bottom</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="nav">
+    <a href="../index.html" class="nav-logo">ftb.</a>
+    <div class="nav-links">
+      <a href="../index.html">home</a>
+      <a href="log.html">log</a>
+      <a href="wins.html" class="active">wins</a>
+      <a href="hobbies.html">hobbies</a>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <h1 class="page-title">the <span style="color:var(--green)">wins.</span></h1>
+    <p class="page-desc">big or small, they all count. log every single one.</p>
+  </div>
+
+  <div class="page-content">
+    <div class="win-input-row">
+      <input type="text" class="win-input" id="win-input" placeholder="what's the win? (e.g. went to the gym, cooked for myself...)" />
+      <button class="add-btn" id="add-win-btn">+ add</button>
+    </div>
+    <div class="wins-list" id="wins-list">
+      <p class="empty-state">no wins yet. go get one.</p>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span>from the bottom - <span id="footer-year"></span></span>
+  </footer>
+
+  <script src="../js/data.js"></script>
+  <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    function renderWins() {
+      const wins = DB.getWins();
+      const el = document.getElementById('wins-list');
+      if (!wins.length) {
+        el.innerHTML = '<p class="empty-state">no wins yet. go get one.</p>';
+        return;
+      }
+      el.innerHTML = wins.map(w => `
+        <div class="win-item">
+          <div class="win-dot"></div>
+          <span class="win-text">${w.text}</span>
+          <span class="win-date">${fmtDate(w.date)}</span>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('add-win-btn').addEventListener('click', () => {
+      const input = document.getElementById('win-input');
+      const text = input.value.trim();
+      if (!text) return;
+      DB.saveWin({ text, date: new Date().toISOString() });
+      input.value = '';
+      renderWins();
+    });
+
+    document.getElementById('win-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('add-win-btn').click();
+    });
+
+    renderWins();
+  </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hobbies - From the Bottom</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="nav">
+    <a href="../index.html" class="nav-logo">ftb.</a>
+    <div class="nav-links">
+      <a href="../index.html">home</a>
+      <a href="log.html">log</a>
+      <a href="wins.html">wins</a>
+      <a href="hobbies.html" class="active">hobbies</a>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <h1 class="page-title">the <span style="color:var(--accent-light)">hobbies.</span></h1>
+    <p class="page-desc">new things, rediscovered things. building a life outside of that.</p>
+  </div>
+
+  <div class="page-content">
+    <!-- Add hobby -->
+    <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:2rem;">
+      <input type="text" class="win-input" id="hobby-emoji" placeholder="emoji" style="max-width:80px; text-align:center; font-size:1.2rem;" />
+      <input type="text" class="win-input" id="hobby-name" placeholder="hobby name" />
+      <input type="text" class="win-input" id="hobby-note" placeholder="a short note about it..." style="flex:2;" />
+      <button class="add-btn" id="add-hobby-btn">+ add</button>
+    </div>
+
+    <div class="hobby-grid" id="hobby-grid"></div>
+  </div>
+
+  <footer class="footer">
+    <span>from the bottom - <span id="footer-year"></span></span>
+  </footer>
+
+  <script src="../js/data.js"></script>
+  <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    function renderHobbies() {
+      const hobbies = DB.getHobbies();
+      const el = document.getElementById('hobby-grid');
+      if (!hobbies.length) {
+        el.innerHTML = '<p class="empty-state">no hobbies yet. what are you going to try?</p>';
+        return;
+      }
+      el.innerHTML = hobbies.map(h => `
+        <div class="hobby-card">
+          <span class="hobby-emoji">${h.emoji || 'spark'}</span>
+          <div class="hobby-name">${h.name}</div>
+          <div class="hobby-note">${h.note || ''}</div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('add-hobby-btn').addEventListener('click', () => {
+      const emoji = document.getElementById('hobby-emoji').value.trim() || 'spark';
+      const name = document.getElementById('hobby-name').value.trim();
+      const note = document.getElementById('hobby-note').value.trim();
+      if (!name) return;
+
+      const hobbies = DB.getHobbies();
+      hobbies.push({ id: Date.now(), emoji, name, note });
+      DB.saveHobbies(hobbies);
+
+      document.getElementById('hobby-emoji').value = '';
+      document.getElementById('hobby-name').value = '';
+      document.getElementById('hobby-note').value = '';
+      renderHobbies();
+    });
+
+    renderHobbies();
+  </script>
+</body>
+</html>

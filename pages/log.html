@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log - From the Bottom</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="nav">
+    <a href="../index.html" class="nav-logo">ftb.</a>
+    <div class="nav-links">
+      <a href="../index.html">home</a>
+      <a href="log.html" class="active">log</a>
+      <a href="wins.html">wins</a>
+      <a href="hobbies.html">hobbies</a>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <h1 class="page-title">the <span style="color:var(--accent-light)">log.</span></h1>
+    <p class="page-desc">every entry, unfiltered. the dips, the highs, all of it.</p>
+  </div>
+
+  <div class="page-content">
+    <div class="log-full-list" id="log-full-list">
+      <p class="empty-state">nothing here yet. go check in from the home page.</p>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span>from the bottom - <span id="footer-year"></span></span>
+  </footer>
+
+  <script src="../js/data.js"></script>
+  <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+    const moods = DB.getMoods();
+    const el = document.getElementById('log-full-list');
+    if (moods.length) {
+      el.innerHTML = moods.map(m => `
+        <div class="entry-item">
+          <span class="entry-date">${fmtDate(m.date)}</span>
+          <span class="entry-text">${m.note || '<em>no note written</em>'}</span>
+          <span class="entry-score" style="color:${moodColor(m.score)}">${m.score}</span>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>
