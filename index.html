@@ -59,8 +59,17 @@
         <span>on top of the world</span>
       </div>
       <textarea class="mood-note" id="mood-note" placeholder="what's on your mind today? (optional)"></textarea>
-      <button class="log-btn" id="log-btn">log today</button>
-      <div class="log-confirm" id="log-confirm">logged.</div>
+      <button class="log-btn" id="log-btn">log today </button>
+      <div class="log-confirm" id="log-confirm">logged. </div>
+    </div>
+  </section>
+
+  <!-- MOOD CHART -->
+  <section class="chart-section">
+    <div class="section-label">mood chart</div>
+    <div class="chart-card">
+      <canvas id="mood-chart"></canvas>
+      <p class="chart-empty" id="chart-empty">log at least 2 days to see your chart.</p>
     </div>
   </section>
 
@@ -99,6 +108,7 @@
     <span>from the bottom - <span id="footer-year"></span></span>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="js/config.js"></script>
   <script type="module" src="js/data.js"></script>
 </body>

@@ -91,6 +91,7 @@ document.getElementById('log-btn').addEventListener('click', async () => {
   await renderEntries()
   await renderStats()
   await renderPulse()
+  await renderChart()
   loadQuote()
 })
 
@@ -131,7 +132,7 @@ async function renderStats() {
     const diff = recentAvg - olderAvg
     const trendEl = document.getElementById('stat-trend')
     if (diff > 0.3) { trendEl.textContent = 'arrow up'; trendEl.style.color = '#3ecf8e' }
-    else if (diff < -0.3) { trendEl.textContent = 'arrown down'; trendEl.style.color = '#f87171' }
+    else if (diff < -0.3) { trendEl.textContent = 'arrow down'; trendEl.style.color = '#f87171' }
     else { trendEl.textContent = 'arrow side'; trendEl.style.color = '#a68afd' }
   }
 }
@@ -235,6 +236,89 @@ async function loadQuote() {
   }
 }
 
+// ===== MOOD CHART =====
+let chartInstance = null
+
+async function renderChart() {
+  const moods = (await DB.getMoods()).slice().reverse() // oldest first
+  const emptyEl = document.getElementById('chart-empty')
+  const canvas = document.getElementById('mood-chart')
+
+  if (moods.length < 2) {
+    canvas.style.display = 'none'
+    emptyEl.style.display = 'block'
+    return
+  }
+
+  emptyEl.style.display = 'none'
+  canvas.style.display = 'block'
+
+  const labels = moods.map(m => fmtDate(m.created_at))
+  const scores = moods.map(m => m.score)
+  const colors = moods.map(m => moodColor(m.score))
+
+  if (chartInstance) chartInstance.destroy()
+
+  chartInstance = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'mood',
+        data: scores,
+        borderColor: '#7c5cfc',
+        backgroundColor: 'rgba(124,92,252,0.08)',
+        pointBackgroundColor: colors,
+        pointBorderColor: colors,
+        pointRadius: 6,
+        pointHoverRadius: 8,
+        tension: 0.4,
+        fill: true,
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#141417',
+          borderColor: 'rgba(255,255,255,0.07)',
+          borderWidth: 1,
+          titleColor: '#a68afd',
+          bodyColor: '#9998a3',
+          padding: 12,
+          callbacks: {
+            label: ctx => `mood: ${ctx.parsed.y}/10`
+          }
+        }
+      },
+      scales: {
+        y: {
+          min: 1,
+          max: 10,
+          ticks: {
+            color: '#6b6a73',
+            stepSize: 1,
+            font: { family: 'Inter', size: 11 }
+          },
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          border: { color: 'rgba(255,255,255,0.07)' }
+        },
+        x: {
+          ticks: {
+            color: '#6b6a73',
+            font: { family: 'Inter', size: 11 },
+            maxRotation: 45
+          },
+          grid: { display: false },
+          border: { color: 'rgba(255,255,255,0.07)' }
+        }
+      }
+    }
+  })
+}
+
 // ===== DAY COUNTER =====
 async function renderDayCount() {
   const start = await DB.getStartDate()
@@ -247,6 +331,7 @@ async function init() {
   await renderEntries()
   await renderStats()
   await renderPulse()
+  await renderChart()
   await loadQuote()
 }
 
