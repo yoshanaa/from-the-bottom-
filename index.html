@@ -51,7 +51,7 @@
     <div class="checkin-card">
       <div class="mood-row">
         <span class="mood-question">how are you feeling right now?</span>
-        <span class="mood-score" id="mood-display"></span>
+        <span class="mood-score" id="mood-display">-</span>
       </div>
       <input type="range" min="1" max="10" value="5" class="mood-slider" id="mood-slider" />
       <div class="mood-labels">
@@ -59,8 +59,8 @@
         <span>on top of the world</span>
       </div>
       <textarea class="mood-note" id="mood-note" placeholder="what's on your mind today? (optional)"></textarea>
-      <button class="log-btn" id="log-btn">log today </button>
-      <div class="log-confirm" id="log-confirm">logged. </div>
+      <button class="log-btn" id="log-btn">log today</button>
+      <div class="log-confirm" id="log-confirm">logged.</div>
     </div>
   </section>
 
@@ -99,7 +99,7 @@
     <span>from the bottom - <span id="footer-year"></span></span>
   </footer>
 
-  <script src="js/data.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/config.js"></script>
+  <script type="module" src="js/data.js"></script>
 </body>
 </html>
