@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About - From the Bottom</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="nav">
+    <a href="../index.html" class="nav-logo">ftb.</a>
+    <div class="nav-links">
+      <a href="../index.html">home</a>
+      <a href="log.html">log</a>
+      <a href="wins.html">wins</a>
+      <a href="about.html" class="active">about</a>
+    </div>
+  </nav>
+
+  <div class="page-hero" style="padding-bottom: 0;">
+    <div class="hero-tag">the story</div>
+    <h1 class="page-title">why i built <span style="color:var(--accent-light)">this.</span></h1>
+  </div>
+
+  <div class="about-content">
+
+    <div class="about-block">
+      <span class="about-num">01</span>
+      <div class="about-text">
+        <p>my first ever breakup. with someone i loved a lot. and it wasn't just a breakup - it was three months of genuinely not knowing how to be okay without that person.</p>
+      </div>
+    </div>
+
+    <div class="about-block">
+      <span class="about-num">02</span>
+      <div class="about-text">
+        <p>i was leaning on my friends and family a lot. too much, honestly. and i started to wonder - is there something i can do just for me? something quiet. something that's just mine.</p>
+      </div>
+    </div>
+
+    <div class="about-block">
+      <span class="about-num">03</span>
+      <div class="about-text">
+        <p>so i built this. a simple place to check in with myself every day. no advice, no one else's opinion - just me, a number, and whatever was on my mind.</p>
+      </div>
+    </div>
+
+    <div class="about-block">
+      <span class="about-num">04</span>
+      <div class="about-text">
+        <p>and then something happened. i started seeing my own data. some days the graph went up. some days it didn't. and on the days it didn't, i'd ask myself - <em>do i actually want to make this breakup my entire personality?</em></p>
+        <p style="margin-top: 1rem;">that question changed things.</p>
+      </div>
+    </div>
+
+    <div class="about-block">
+      <span class="about-num">05</span>
+      <div class="about-text">
+        <p>i reflected. then reflected again. and slowly - not all at once, not in a straight line - the graph started going up more than it went down.</p>
+      </div>
+    </div>
+
+    <div class="about-divider"></div>
+
+    <div class="about-closing">
+      <p>this site is still growing. there's more i want to add, more features, more ways to track the rebuild. but i started with the basics - because sometimes that's all you need to start seeing yourself clearly again.</p>
+      <p style="margin-top: 1.5rem; color: var(--accent-light); font-style: normal; font-weight: 500;">from the bottom - up.</p>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <span>from the bottom - <span id="footer-year"></span></span>
+  </footer>
+
+  <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear()
+  </script>
+</body>
+</html>
