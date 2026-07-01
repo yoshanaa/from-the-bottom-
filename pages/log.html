@@ -26,7 +26,7 @@
 
   <div class="page-content">
     <div class="log-full-list" id="log-full-list">
-      <p class="empty-state">nothing here yet. go check in from the home page.</p>
+      <p class="empty-state">loading...</p>
     </div>
   </div>
 
@@ -34,20 +34,49 @@
     <span>from the bottom - <span id="footer-year"></span></span>
   </footer>
 
-  <script src="../js/data.js"></script>
-  <script>
-    document.getElementById('footer-year').textContent = new Date().getFullYear();
-    const moods = DB.getMoods();
-    const el = document.getElementById('log-full-list');
-    if (moods.length) {
+  <script src="../js/config.js"></script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+    document.getElementById('footer-year').textContent = new Date().getFullYear()
+
+    function moodColor(score) {
+      if (score <= 3) return '#f87171'
+      if (score <= 5) return '#fbbf24'
+      if (score <= 7) return '#a68afd'
+      return '#3ecf8e'
+    }
+
+    function fmtDate(iso) {
+      return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    }
+
+    async function load() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) { window.location.href = '../index.html'; return }
+
+      const { data: moods } = await supabase
+        .from('mood table')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+
+      const el = document.getElementById('log-full-list')
+      if (!moods || !moods.length) {
+        el.innerHTML = '<p class="empty-state">nothing here yet. go check in from the home page.</p>'
+        return
+      }
       el.innerHTML = moods.map(m => `
         <div class="entry-item">
-          <span class="entry-date">${fmtDate(m.date)}</span>
+          <span class="entry-date">${fmtDate(m.created_at)}</span>
           <span class="entry-text">${m.note || '<em>no note written</em>'}</span>
           <span class="entry-score" style="color:${moodColor(m.score)}">${m.score}</span>
         </div>
-      `).join('');
+      `).join('')
     }
+
+    load()
   </script>
 </body>
 </html>

@@ -131,6 +131,7 @@ async function renderStats() {
     const olderAvg = older.length ? older.reduce((a, m) => a + m.score, 0) / older.length : recentAvg
     const diff = recentAvg - olderAvg
     const trendEl = document.getElementById('stat-trend')
+    trendEl.style.fontFamily = 'Inter, sans-serif'
     if (diff > 0.3) { trendEl.textContent = 'arrow up'; trendEl.style.color = '#3ecf8e' }
     else if (diff < -0.3) { trendEl.textContent = 'arrow down'; trendEl.style.color = '#f87171' }
     else { trendEl.textContent = 'arrow side'; trendEl.style.color = '#a68afd' }

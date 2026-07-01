@@ -30,7 +30,7 @@
       <button class="add-btn" id="add-win-btn">+ add</button>
     </div>
     <div class="wins-list" id="wins-list">
-      <p class="empty-state">no wins yet. go get one.</p>
+      <p class="empty-state">loading...</p>
     </div>
   </div>
 
@@ -38,40 +38,61 @@
     <span>from the bottom - <span id="footer-year"></span></span>
   </footer>
 
-  <script src="../js/data.js"></script>
-  <script>
-    document.getElementById('footer-year').textContent = new Date().getFullYear();
+  <script src="../js/config.js"></script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-    function renderWins() {
-      const wins = DB.getWins();
-      const el = document.getElementById('wins-list');
-      if (!wins.length) {
-        el.innerHTML = '<p class="empty-state">no wins yet. go get one.</p>';
-        return;
+    document.getElementById('footer-year').textContent = new Date().getFullYear()
+
+    function fmtDate(iso) {
+      return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    }
+
+    let user = null
+
+    async function renderWins() {
+      const { data: wins } = await supabase
+        .from('wins table')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+
+      const el = document.getElementById('wins-list')
+      if (!wins || !wins.length) {
+        el.innerHTML = '<p class="empty-state">no wins yet. go get one.</p>'
+        return
       }
       el.innerHTML = wins.map(w => `
         <div class="win-item">
           <div class="win-dot"></div>
           <span class="win-text">${w.text}</span>
-          <span class="win-date">${fmtDate(w.date)}</span>
+          <span class="win-date">${fmtDate(w.created_at)}</span>
         </div>
-      `).join('');
+      `).join('')
     }
 
-    document.getElementById('add-win-btn').addEventListener('click', () => {
-      const input = document.getElementById('win-input');
-      const text = input.value.trim();
-      if (!text) return;
-      DB.saveWin({ text, date: new Date().toISOString() });
-      input.value = '';
-      renderWins();
-    });
+    document.getElementById('add-win-btn').addEventListener('click', async () => {
+      const input = document.getElementById('win-input')
+      const text = input.value.trim()
+      if (!text || !user) return
+      await supabase.from('wins table').insert({ user_id: user.id, text })
+      input.value = ''
+      renderWins()
+    })
 
     document.getElementById('win-input').addEventListener('keydown', e => {
-      if (e.key === 'Enter') document.getElementById('add-win-btn').click();
-    });
+      if (e.key === 'Enter') document.getElementById('add-win-btn').click()
+    })
 
-    renderWins();
+    async function load() {
+      const { data: { user: u } } = await supabase.auth.getUser()
+      if (!u) { window.location.href = '../index.html'; return }
+      user = u
+      renderWins()
+    }
+
+    load()
   </script>
 </body>
 </html>
