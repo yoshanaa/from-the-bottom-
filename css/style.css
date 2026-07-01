@@ -375,6 +375,63 @@ body {
   color: var(--text-muted);
 }
 
+/* ===== AI REFLECTION ===== */
+.reflect-wrap {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+}
+
+.reflect-btn {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent-light);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 1.25rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: background 0.2s, color 0.2s;
+}
+
+.reflect-btn:hover {
+  background: var(--accent-dim);
+}
+
+.reflect-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reflect-output {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: var(--text-mid);
+  line-height: 1.75;
+  font-style: italic;
+  min-height: 0;
+  transition: all 0.3s;
+  white-space: pre-wrap;
+}
+
+.reflect-output.loading::after {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  margin-left: 4px;
+  animation: blink 0.8s infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 /* ===== CHART ===== */
 .chart-section {
   max-width: 860px;

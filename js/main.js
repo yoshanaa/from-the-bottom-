@@ -88,6 +88,10 @@ document.getElementById('log-btn').addEventListener('click', async () => {
   const confirm = document.getElementById('log-confirm')
   confirm.classList.add('show')
   setTimeout(() => confirm.classList.remove('show'), 2500)
+
+  // Show reflect button after logging
+  document.getElementById('reflect-wrap').style.display = 'block'
+  document.getElementById('reflect-output').textContent = ''
   await renderEntries()
   await renderStats()
   await renderPulse()
@@ -319,6 +323,48 @@ async function renderChart() {
     }
   })
 }
+
+// ===== AI REFLECTION =====
+async function getReflection(score, note) {
+  const outputEl = document.getElementById('reflect-output')
+  const btn = document.getElementById('reflect-btn')
+
+  btn.disabled = true
+  outputEl.textContent = 'thinking'
+  outputEl.classList.add('loading')
+
+  const prompt = `You are a warm, honest, and grounded friend - not a therapist, not a motivational poster. Someone just logged their mood as ${score}/10 on a scale from 1 (rock bottom) to 10 (on top of the world).${note ? ` They wrote: "${note}"` : ' They didn\'t leave a note.'}
+
+Write a short, personal response (2-4 sentences max). Be real with them. If they're low, acknowledge it without toxic positivity. If they're doing well, match their energy. No bullet points, no lists, just talk to them like a real person. Don't start with "I" and don't be cheesy.`
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    })
+
+    const data = await response.json()
+    const text = data.content?.[0]?.text || 'couldn\'t get a reflection right now.'
+    outputEl.classList.remove('loading')
+    outputEl.textContent = text
+  } catch {
+    outputEl.classList.remove('loading')
+    outputEl.textContent = 'couldn\'t connect right now. but logging it still matters.'
+  }
+
+  btn.disabled = false
+}
+
+document.getElementById('reflect-btn').addEventListener('click', () => {
+  const score = parseInt(document.getElementById('mood-slider').value)
+  const note = document.getElementById('mood-note').value.trim()
+  getReflection(score, note)
+})
 
 // ===== DAY COUNTER =====
 async function renderDayCount() {
